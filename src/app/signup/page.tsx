@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { signupRequestSchema, SignupRequest } from "@/app/_types/SignupRequest";
 import { TextInputField } from "@/app/_components/TextInputField";
 import { ErrorMsgField } from "@/app/_components/ErrorMsgField";
+import { PasswordStrengthIndicator } from "@/app/_components/PasswordStrengthIndicator";
 import { Button } from "@/app/_components/Button";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,6 +28,7 @@ const Page: React.FC = () => {
 
   const [isPending, startTransition] = useTransition();
   const [isSignUpCompleted, setIsSignUpCompleted] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
 
   // フォーム処理関連の準備と設定
   const formMethods = useForm<SignupRequest>({
@@ -48,6 +50,10 @@ const Page: React.FC = () => {
     const subscription = formMethods.watch((value, { name }) => {
       if (name === c_Email || name === c_Password || name === c_ConfirmPassword) {
         formMethods.clearErrors("root");
+      }
+      // パスワード値の変更を監視
+      if (name === c_Password) {
+        setCurrentPassword(value.password || "");
       }
     });
     return () => subscription.unsubscribe();
@@ -138,6 +144,7 @@ const Page: React.FC = () => {
             autoComplete="new-password"
           />
           <ErrorMsgField msg={fieldErrors.password?.message} />
+          <PasswordStrengthIndicator password={currentPassword} />
         </div>
 
         <div>
