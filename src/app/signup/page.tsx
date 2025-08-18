@@ -21,6 +21,7 @@ const Page: React.FC = () => {
   const c_Name = "name";
   const c_Email = "email";
   const c_Password = "password";
+  const c_ConfirmPassword = "confirmPassword";
 
   const router = useRouter();
 
@@ -45,7 +46,7 @@ const Page: React.FC = () => {
   // ルートエラーメッセージのクリアに関する設定
   useEffect(() => {
     const subscription = formMethods.watch((value, { name }) => {
-      if (name === c_Email || name === c_Password) {
+      if (name === c_Email || name === c_Password || name === c_ConfirmPassword) {
         formMethods.clearErrors("root");
       }
     });
@@ -134,9 +135,25 @@ const Page: React.FC = () => {
             type="password"
             disabled={isPending || isSignUpCompleted}
             error={!!fieldErrors.password}
-            autoComplete="off"
+            autoComplete="new-password"
           />
           <ErrorMsgField msg={fieldErrors.password?.message} />
+        </div>
+
+        <div>
+          <label htmlFor={c_ConfirmPassword} className="mb-2 block font-bold">
+            パスワード（確認）
+          </label>
+          <TextInputField
+            {...formMethods.register(c_ConfirmPassword)}
+            id={c_ConfirmPassword}
+            placeholder="*****"
+            type="password"
+            disabled={isPending || isSignUpCompleted}
+            error={!!fieldErrors.confirmPassword}
+            autoComplete="new-password"
+          />
+          <ErrorMsgField msg={fieldErrors.confirmPassword?.message} />
           <ErrorMsgField msg={fieldErrors.root?.message} />
         </div>
 

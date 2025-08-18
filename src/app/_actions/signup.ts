@@ -41,7 +41,7 @@ export const signupServerAction = async (
     const hashedPassword = await bcrypt.hash(payload.password, 10);  // パスワードをハッシュ化
     // const hashedPassword = await bcrypt.hash(payload.password, 10);
 
-    // ユーザの作成
+    // ユーザの作成（confirmPasswordは除外）
     const user = await prisma.user.create({
       data: {
         email: payload.email,
